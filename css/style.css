@@ -1,0 +1,36 @@
+:root{--max:1100px;--gap:24px}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;color:#111}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:var(--max);margin:auto;padding:0 16px}
+.site-header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;display:flex;align-items:center;gap:16px;padding:12px 16px;z-index:10}
+.logo{font-weight:700;letter-spacing:.5px}
+.global-nav{margin-left:auto;display:flex;gap:16px;align-items:center}
+.nav-toggle{display:none;margin-left:auto;font-size:20px;background:transparent;border:0}
+.btn-primary{display:inline-block;padding:10px 16px;border-radius:12px;background:#111;color:#fff}
+.hero{background:linear-gradient(180deg,#f6f7fb,transparent);padding:72px 0;margin-bottom:24px}
+.hero-inner{max-width:var(--max);margin:auto;padding:0 16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);margin:40px auto}
+.grid-3 article{padding:20px;border:1px solid #eee;border-radius:16px;background:#fff}
+.cta{text-align:center;margin:64px auto}
+.site-footer{margin-top:64px;border-top:1px solid #eee;padding:24px 16px;display:flex;justify-content:space-between;align-items:center}
+.table-like{display:grid;grid-template-columns:160px 1fr;gap:12px;align-items:center}
+.contact-form{display:grid;gap:12px;max-width:640px}
+.contact-form input,.contact-form textarea,.contact-form select{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px}
+.news-list{list-style:none;padding:0;display:grid;gap:10px}
+@media (max-width:840px){
+  .grid-3{grid-template-columns:1fr}
+  .global-nav{display:none}
+  .nav-toggle{display:block}
+}
+
+/* ==== Global Background (全ページ共通) ==== */
+body{
+  background-color: #ffffff; /* フォールバック */
+  background-image: url("../images/haikei3.jpg"); /* ←拡張子: jpg に注意 */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed; /* パララックス風に固定 */
+}
