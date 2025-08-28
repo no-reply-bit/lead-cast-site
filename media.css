@@ -1,0 +1,167 @@
+/* ===============================
+   LEAD CAST — Mobile Responsive Fixes
+   1) まず共通の安全ガード
+   2) 幅 1024/900/840/640 の各段階で段階的に最適化
+   3) “背景の固定/パララックス/巨大ロゴ” をSPで抑制
+   4) Hero・実績・ロゴ帯・サービス・メンバー・アクセスを縦積み&読みやすく
+   5) ナビはCSSだけで開閉（aria-expandedフラグ利用）
+   ※ 既存スタイルの上書き専用。既存に無い選択子は追加。
+=================================== */
+
+/* ---------- 0) 共通の安全ガード ---------- */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, video { max-width: 100%; height: auto; }
+
+/* 背景の固定はSPで重い/崩れ要因になりやすいので無効化 */
+@media (max-width: 900px){
+  .bg-section,
+  .bg1, .bg2, .bg3 {
+    background-attachment: scroll !important;
+    background-position: center top;
+  }
+}
+
+/* （万一の）巨大パディング/固定幅を抑止 */
+[class*="container"], .container { width: 100%; max-width: 100%; padding-inline: 16px; box-sizing: border-box; }
+
+/* ---------- 1) Header / Global Nav ---------- */
+@media (max-width: 900px){
+  .site-header{
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 60px; padding: 0 12px; background: rgba(0,0,0,.28);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+
+  /* 左上の巨大ロゴをSPサイズに */
+  .brand-logo{
+    position: fixed; top: 0; left: 0; z-index: 1000;
+    padding: 12px 14px 12px 12px; border-radius: 0 0 36px 0; gap: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.10);
+  }
+  .brand-logo img{ width: 34px; height: 34px; }
+  .brand-text{ font-size: 18px; }
+
+  /* ハンバーガーを右に表示 */
+  .nav-toggle{
+    display: inline-block; position: fixed; right: 10px; top: 10px;
+    z-index: 1001; width: 44px; height: 40px; line-height: 40px;
+    background: #fff; color: #111; border: 0; border-radius: 10px;
+  }
+
+  /* ナビ本体をドロワーに（aria-expanded=true で開く） */
+  .global-nav{
+    position: fixed; inset: 60px 0 auto 0; /* ヘッダーの下に出す */
+    display: grid; gap: 8px; padding: 12px 16px 18px;
+    background: rgba(255,255,255,.98); transform: translateY(-12px);
+    opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  }
+  .global-nav a{ color: #111; padding: 10px 8px; border-radius: 10px; }
+  .global-nav .btn-primary{ background:#0f46ff; color:#fff; border-radius: 999px; }
+
+  /* ボタンのaria-expandedがtrueの時に表示（JS無改修でもOK） */
+  .nav-toggle[aria-expanded="true"] ~ .global-nav{
+    opacity: 1; transform: none; pointer-events: auto;
+  }
+}
+
+/* ---------- 2) Hero（テキスト＋画像） ---------- */
+@media (max-width: 1024px){
+  .hero{ padding: 80px 0 44px; min-height: auto; }
+  .hero--split .hero-inner{
+    display: grid; grid-template-columns: 1fr; row-gap: 18px; text-align: center;
+  }
+  .hero-image{ order: -1; justify-self: center; }
+  .hero-image img{
+    width: min(92vw, 640px); max-width: 100%; border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.20);
+    transform: none !important;  /* 斜めパースをSPで無効化 */
+  }
+  .hero-text{ max-width: 92vw; margin-inline: auto; }
+  .hero-text .eyebrow{ font-size: clamp(14px, 3.4vw, 18px); }
+  .hero-text .main-title{ font-size: clamp(22px, 6.2vw, 34px); line-height: 1.28; }
+  .hero-text .brand{ font-size: clamp(26px, 8vw, 40px); }
+  .hero-buttons{ justify-content: center; gap: 10px; }
+  .btn-large{ padding: 12px 18px; font-size: 16px; }
+}
+
+/* デコ（雲/サボテン）はSPで小さく＆はみ出し抑制 */
+@media (max-width: 900px){
+  .decor-cactus{ width: clamp(120px, 28vw, 220px); left: -4vw; bottom: 30px; }
+  .decor-cloud { width: clamp(160px, 36vw, 300px); right: -5vw; top: 24px; }
+  .has-decor{ --shift-cactus: 0px; --shift-cloud: 0px; } /* パララックス効果ほぼ停止 */
+}
+
+/* ---------- 3) 実績バンド / ロゴ帯 ---------- */
+@media (max-width: 840px){
+  .stats-band{ padding: 28px 0 18px; }
+  .stats-badge{ font-size: clamp(20px, 6vw, 28px); }
+  .stats-note{ font-size: clamp(13px, 3.8vw, 15px); line-height: 1.6; }
+  .bg-section.logos{ padding: 14px 0 40px; }
+  .logo-track{ gap: 20px; }
+  .logo-track img{ height: 42px; margin: 0 12px; }
+}
+
+/* ---------- 4) サービス（2カラム→縦） ---------- */
+@media (max-width: 900px){
+  .services-duo{ grid-template-columns: 1fr; gap: 16px; margin: 36px 0; }
+  .svc-card{ border-radius: 16px; }
+  .svc-thumb{ border-radius: 12px; }
+  .svc-actions{ gap: 10px; }
+}
+
+/* SERVICE 見出しのマスク動画はSPで高さ比率を浅く */
+@media (max-width: 640px){
+  .service-svg{ aspect-ratio: 16 / 5; }
+}
+
+/* ---------- 5) MEMBER（横スクロールカード） ---------- */
+@media (max-width: 900px){
+  .team{ margin: 40px auto; }
+  .team-title{ font-size: clamp(18px, 5vw, 24px); }
+  .team-lead{ font-size: 14px; }
+  .team-track{
+    grid-auto-columns: clamp(260px, 78vw, 340px);
+    padding: 2px 10px 16px;
+  }
+  .member-card{ border-radius: 16px; }
+  .member-photo{ aspect-ratio: 16/9; }
+}
+
+/* ---------- 6) アクセス（2カラム→縦） ---------- */
+@media (max-width: 900px){
+  .access{ padding-block: 36px; }
+  .access-grid{ grid-template-columns: 1fr; gap: 16px; }
+  .access-left{
+    order: 2; padding: 20px; border-radius: 18px; min-height: auto;
+    box-shadow: 0 14px 36px rgba(0,0,0,.18);
+  }
+  .access-title .jp{ font-size: clamp(22px, 6vw, 28px); }
+  .access-list{ grid-template-columns: 1fr; gap: 8px 0; }
+  .access-map{ order: 1; }
+  .access-map iframe{ height: clamp(300px, 52vw, 460px); border-radius: 16px; }
+}
+
+/* ---------- 7) フッター ---------- */
+@media (max-width: 640px){
+  .site-footer{
+    display: grid; gap: 10px; justify-content: center; text-align: center;
+    padding: 16px;
+  }
+  .site-footer nav a{ display: inline-block; padding: 6px 8px; }
+}
+
+/* ---------- 8) 細かい文字サイズ・余白の調整 ---------- */
+@media (max-width: 640px){
+  h1{ font-size: clamp(22px, 7vw, 28px); }
+  h2{ font-size: clamp(16px, 5.5vw, 22px); }
+  p, li{ font-size: 15px; line-height: 1.7; }
+  .btn-primary, .btn-outline{ padding: 10px 14px; font-size: 15px; }
+}
+
+/* ---------- 9) 入口アニメの負荷軽減（SP） ---------- */
+@media (max-width: 640px){
+  .intro-curtain{ transition: opacity .35s ease .05s, --ring .55s ease; }
+  html.has-reveal .split-chars .char{ transform: translateY(10px); }
+}
